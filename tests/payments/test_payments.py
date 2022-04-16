@@ -3,10 +3,12 @@ import pytest
 from testproj.payments import Account, bill, InsufficientMoney
 
 
-def test_bill_success(fake):
-    source_amount = 1000
-    destination_amount = 2000
-    bill_amount = 200
+@pytest.mark.parametrize('source_amount, bill_amount', [
+    (1000, 200),
+    (50, 50),
+])
+def test_bill_success(fake, source_amount, bill_amount):
+    destination_amount = fake.pyint()
 
     source = Account(fake.pystr(), amount=source_amount)
     destination = Account(fake.pystr(), amount=destination_amount)
@@ -19,9 +21,9 @@ def test_bill_success(fake):
 
 def test_insufficient_money(fake):
     source_amount = 50
-    destination_amount = 2000
     bill_amount = 200
 
+    destination_amount = fake.pyint()
     source = Account(fake.pystr(), amount=source_amount)
     destination = Account(fake.pystr(), amount=destination_amount)
 
